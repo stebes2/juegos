@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alejo y el Abuelo: El Misterio del Celular</title>
+    <style>
+        :root {
+            --primary-blue: #3498db;
+            --accent-green: #2ecc71;
+            --warm-wood: #8e44ad;
+            --bg-color: #fdfaf6;
+            --text-dark: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0e5ec;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #game-container {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+            border: 3px solid var(--primary-blue);
+        }
+
+        h1 { color: var(--primary-blue); margin-top: 0; }
+        
+        #story-text {
+            font-size: 1.15rem;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            min-height: 120px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            font-style: italic;
+        }
+
+        #full-story {
+            text-align: left;
+            background: #fff8ef;
+            border: 2px solid #f1c27d;
+            border-radius: 15px;
+            padding: 12px 16px;
+            margin-bottom: 18px;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+
+        #full-story summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: #8a5a0a;
+            margin-bottom: 8px;
+        }
+
+        #full-story p {
+            margin: 0 0 10px;
+            line-height: 1.5;
+        }
+
+        #challenge-box {
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            border: 2px solid #cbd5e0;
+            width: 80%;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--primary-blue); }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        button:hover { transform: scale(1.05); background-color: #2980b9; }
+
+        #progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 6px;
+            margin-top: 25px;
+            overflow: hidden;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background: var(--accent-green);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .stats { font-size: 0.9rem; color: #718096; margin-top: 10px; font-weight: bold; }
+        
+        .icon-hint { font-size: 2rem; margin-bottom: 10px; }
+
+        .menu-link {
+            display: inline-block;
+            margin-top: 14px;
+            color: #2b6cb0;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .menu-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="icon-hint" id="scene-icon">👴📱</div>
+    <h1>Misión: El Celular del Abuelo</h1>
+
+    <details id="full-story" open>
+        <summary>Historia completa: El celular del abuelo</summary>
+        <p><strong>El celular del abuelo</strong></p>
+        <p>—¿Qué botón toco si quiero mandar una foto del gato? —preguntó el abuelo mientras apretaba la pantalla con todo el dedo.</p>
+        <p>Alejo suspiró con la paciencia medio vencida.</p>
+        <p>—Ese, el ícono con la flechita azul. Pero tienes que soltar, no apretar como si fuera un botón de ascensor.</p>
+        <p>El abuelo frunció el ceño, pero obedeció. Alejo miró de reojo el reloj. Ya llevaba casi cuarenta minutos enseñándole a usar WhatsApp y todavía no habían salido del tema “cómo mandar un sticker”.</p>
+        <p>—¿Y este emoji qué significa? ¿Tiene alergia?</p>
+        <p>—¡Es una risa! —respondió Alejo, sin poder evitar reír él también.</p>
+        <p>Los viernes por la tarde eran distintos desde que su mamá decidió que debía pasar más tiempo con el abuelo. Según ella, “porque en esta casa todos estamos demasiado pegados a las pantallas y demasiado lejos de los que tenemos cerca”.</p>
+        <p>Al principio Alejo protestó. Tenía tareas, partidos, videos que editar, cosas importantes. ¿Qué iba a hacer con un abuelo que confundía el control remoto con el celular?</p>
+        <p>Pero algo empezó a cambiar.</p>
+        <p>El abuelo contaba historias. Muchas. Algunas parecían inventadas, como la vez que dijo que viajó en burro a la escuela con dos metros de nieve y una culebra en la mochila. Otras eran reales, como cuando fue mecánico y arregló una moto usando una cuchara y un cable de radio.</p>
+        <p>Y, de a poco, Alejo se sorprendió a sí mismo contando cosas también. Le habló de cómo se sentía invisible en el colegio, de cómo había dejado de hablar con su mejor amigo después de una discusión sin sentido, de lo solo que se sentía a veces aunque estuviera rodeado de gente.</p>
+        <p>El abuelo no daba sermones. Sólo escuchaba. A veces decía cosas como:</p>
+        <p>—Las amistades verdaderas también se pelean. Lo importante es quién da el primer paso para volver a hablar.</p>
+        <p>O:</p>
+        <p>—Estar solo no siempre es malo. A veces es cuando uno se encuentra.</p>
+        <p>Un viernes Alejo llegó con cara larga. Había sacado un 3,7 en una prueba y su papá estaba furioso. El abuelo lo miró, puso el celular sobre la mesa y dijo:</p>
+        <p>—Ven, acompáñame.</p>
+        <p>Lo llevó al patio donde tenía una vieja radio a pilas. Encendió una emisora de tangos y se pusieron a lavar el auto con una esponja y un balde.</p>
+        <p>—Cuando las cosas van mal es bueno hacer algo con las manos. El cuerpo también piensa, ¿sabes?</p>
+        <p>No hablaron más del 3,7. Pero esa noche Alejo durmió mejor que en toda la semana.</p>
+        <p>Un día, sin avisar, el abuelo le mandó su primer sticker por WhatsApp: un gato bailando. Abajo, escribió con dificultad: “Para cuando estés triste. El gato también baila aunque llueva”.</p>
+        <p>Alejo guardó ese mensaje como favorito.</p>
+    </details>
+
+    <div id="story-text">Cargando...</div>
+    
+    <div id="challenge-box">
+        <p id="question-text" style="font-weight: bold;"></p>
+        <input type="text" id="user-answer" placeholder="Responde aquí...">
+        <br>
+        <button onclick="checkAnswer()">Avanzar en la Historia</button>
+    </div>
+
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+    <p class="stats">Desafío <span id="current-step">1</span> de 15</p>
+    <a class="menu-link" href="index.html">Menu principal</a>
+</div>
+
+<script>
+    const aventuras = [
+        // BLOQUE 1: APRENDIENDO TECNOLOGÍA (LENGUA Y LÓGICA)
+        {
+            historia: "El abuelo está confundido. Dice que no sabe qué botón tocar para mandar la foto del gato.",
+            pregunta: "Alejo le dice que toque el ícono con la flechita... ¿De qué color es la flecha?",
+            respuesta: "azul",
+            icono: "📸"
+        },
+        {
+            historia: "El abuelo aprieta muy fuerte. Alejo le explica que no es un botón de...",
+            pregunta: "¿De qué transporte o lugar comparó Alejo el botón?",
+            respuesta: "ascensor",
+            icono: "🏢"
+        },
+        {
+            historia: "¡Bien! Ahora el abuelo ve una cara amarilla riendo y piensa que tiene alergia.",
+            pregunta: "¿Cómo se llaman esos dibujitos o iconos que usamos para expresar emociones?",
+            respuesta: "emoji",
+            icono: "🤣"
+        },
+        {
+            historia: "Para avanzar, Alejo debe explicar qué es un 'Sticker'. Ayúdalo a ordenar esta palabra: T-A-E-Q-I-U-E-T.",
+            pregunta: "Si 'Sticker' fuera en español, sería una...",
+            respuesta: "etiqueta",
+            icono: "🏷️"
+        },
+        // BLOQUE 2: LAS HISTORIAS DEL ABUELO (COMPRENSIÓN Y MEMORIA)
+        {
+            historia: "El abuelo empieza a contar sus aventuras. Dice que viajó en un animal a la escuela.",
+            pregunta: "¿En qué animal viajaba el abuelo cuando había dos metros de nieve?",
+            respuesta: "burro",
+            icono: "🫏"
+        },
+        {
+            historia: "¡Increíble! También dijo que llevaba algo peligroso en la mochila.",
+            pregunta: "¿Qué animal llevaba el abuelo en su mochila?",
+            respuesta: "culebra",
+            icono: "🎒"
+        },
+        {
+            historia: "El abuelo fue mecánico. Una vez arregló una moto con algo que se usa para comer.",
+            pregunta: "¿Qué cubierto usó para arreglar la moto?",
+            respuesta: "cuchara",
+            icono: "🏍️"
+        },
+        {
+            historia: "Además de la cuchara, usó un cable de...",
+            pregunta: "¿De qué aparato era el cable?",
+            respuesta: "radio",
+            icono: "📻"
+        },
+        // BLOQUE 3: MATEMÁTICAS Y VIDA (CÁLCULO)
+        {
+            historia: "Alejo pasó 40 minutos enseñando WhatsApp y 20 minutos escuchando historias.",
+            pregunta: "¿Cuántos minutos pasó en total con el abuelo? (Solo el número)",
+            respuesta: "60",
+            icono: "⏰"
+        },
+        {
+            historia: "Alejo está triste por su nota en la prueba. Se sacó un 3,7.",
+            pregunta: "¿Cuánto le faltó para llegar al 10? (Respuesta con coma, ej: 5,5)",
+            respuesta: "6,3",
+            icono: "📝"
+        },
+        {
+            historia: "El abuelo decide que es hora de lavar el auto para despejar la cabeza.",
+            pregunta: "Si usan 4 baldes de agua por cada lado del auto (son 4 lados), ¿cuántos baldes usan en total?",
+            respuesta: "16",
+            icono: "🚗"
+        },
+        {
+            historia: "Mientras lavan, escuchan una radio a pilas que suena de maravilla.",
+            pregunta: "¿Qué género musical escuchan en la radio vieja?",
+            respuesta: "tango",
+            icono: "🎶"
+        },
+        // BLOQUE 4: SABIDURÍA (REFLEXIÓN)
+        {
+            historia: "El abuelo dice: 'Las amistades verdaderas también se pelean'.",
+            pregunta: "Según el abuelo, ¿quién es el más importante? El que da el primer...",
+            respuesta: "paso",
+            icono: "👣"
+        },
+        {
+            historia: "Alejo aprendió que estar solo a veces sirve para...",
+            pregunta: "Completa la frase del abuelo: 'A veces es cuando uno se ____'",
+            respuesta: "encuentra",
+            icono: "🧘"
+        },
+        {
+            historia: "¡Llegó un mensaje! El abuelo mandó su primer sticker: un gato bailando.",
+            pregunta: "Completa la frase del sticker: 'El gato también baila aunque ____'",
+            respuesta: "llueva",
+            icono: "🐱"
+        }
+    ];
+
+    let indiceActual = 0;
+
+function actualizarPantalla() {
+    if (indiceActual < aventuras.length) {
+        const a = aventuras[indiceActual];
+        document.getElementById("story-text").innerText = a.historia;
+        document.getElementById("question-text").innerText = a.pregunta;
+        document.getElementById("current-step").innerText = indiceActual + 1;
+        document.getElementById("scene-icon").innerText = a.icono;
+        document.getElementById("user-answer").value = "";
+        
+        let progreso = ((indiceActual) / aventuras.length) * 100;
+        document.getElementById("progress-fill").style.width = progreso + "%";
+    } else {
+        document.getElementById("game-container").innerHTML = `
+            <h1 style="color: #2ecc71;">❤️ ¡CONEXIÓN COMPLETADA! ❤️</h1>
+            <p style="font-size: 1.2rem;">
+               Alejo y su abuelo ahora están más cerca que nunca. 
+               Aprendieron que la tecnología es linda, pero las historias y el tiempo juntos son lo que realmente importa.
+            </p>
+            <div style="background: #f0f4f8; padding: 15px; border-radius: 15px; margin: 20px 0;">
+                <p><strong>Mensaje Guardado como Favorito:</strong><br>
+                "Para cuando estés triste. El gato también baila aunque llueva." 🐱💃</p>
+            </div>
+            <button onclick="location.reload()">Volver a jugar</button>
+            <br>
+            <a href="index.html" style="display: inline-block; margin-top: 12px; color: #2b6cb0; font-weight: bold;">Volver al menu principal</a>
+        `;
+    }
+}
+
+function checkAnswer() {
+    let input = document.getElementById("user-answer").value.toLowerCase().trim();
+    input = input.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    const correcta = aventuras[indiceActual].respuesta.toLowerCase();
+
+    if (input.includes(correcta) || input === correcta) {
+        indiceActual++;
+        actualizarPantalla();
+    } else {
+        alert("❌ ¡Casi! El abuelo no entendió esa respuesta. ¡Prueba otra vez!");
+    }
+}
+
+    actualizarPantalla();
+
+    document.getElementById("user-answer").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            checkAnswer();
+        }
+    });
+</script>
+
+</body>
+</html>

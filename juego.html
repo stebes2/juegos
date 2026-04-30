@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renzo Detective: Operación Monumental Espacial</title>
+    <style>
+        :root {
+            --river-red: #eb192e;
+            --space-dark: #1a1a2e;
+            --text-gold: #ffd700;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--space-dark);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #game-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            border: 2px solid var(--river-red);
+        }
+
+        h1 { color: var(--river-red); text-transform: uppercase; }
+        
+        #story-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            min-height: 100px;
+        }
+
+        #challenge-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: none;
+            width: 70%;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: var(--river-red);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover { background-color: #b31222; }
+
+        #progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #444;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background: var(--text-gold);
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .stats { font-size: 0.8rem; color: #aaa; margin-top: 10px; }
+
+        .menu-link {
+            display: inline-block;
+            margin-top: 14px;
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .menu-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <h1>🕵️ Renzo Detective</h1>
+    <div id="story-text">Cargando misión...</div>
+    
+    <div id="challenge-box">
+        <p id="question-text"></p>
+        <input type="text" id="user-answer" placeholder="Escribe tu respuesta aquí...">
+        <br>
+        <button onclick="checkAnswer()">Resolver Misterio</button>
+    </div>
+
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+    <p class="stats">Misterio <span id="current-step">1</span> de 12</p>
+    <a class="menu-link" href="index.html">Menu principal</a>
+</div>
+
+<script>
+    const misterios = [
+        // LENGUA (Escenario: Monumental)
+        {
+            historia: "Marcelo Gallardo se acerca a Renzo: '¡Detective! Galarza Fonda dejó una nota cifrada en el vestuario'.",
+            pregunta: "Ordena las letras A-R-T-E-L-A-D-O (Pista: Es alguien que cuenta un secreto)",
+            respuesta: "delatora",
+            escenario: "Monumental"
+        },
+        {
+            historia: "¡Exacto! Es una nota delatora. Ahora debemos entrar a la oficina, pero la clave es un sinónimo intruso.",
+            pregunta: "¿Cuál NO es sinónimo de 'Estrategia'?: Plan, Táctica, Método o Confusión.",
+            respuesta: "confusion",
+            escenario: "Monumental"
+        },
+        {
+            historia: "Galarza Fonda huye hacia un cohete oculto bajo la tribuna Sivori. Hay un cartel de dirección.",
+            pregunta: "Completa correctamente: 'Espero que Renzo no nos ____ encontrado(del verbo encontrar)'. ¿Halla o Haya?",
+            respuesta: "haya",
+            escenario: "Monumental"
+        },
+        {
+            historia: "¡Corré Renzo! Galarza Fonda está subiendo a la nave.",
+            pregunta: "En la frase: 'El malvado Galarza Fonda escapa', ¿cuál es el núcleo del sujeto?",
+            respuesta: "galarza fonda",
+            escenario: "Monumental"
+        },
+        // HISTORIA (Escenario: Espacio)
+        {
+            historia: "¡Despegamos! La 'Muñeco-Nave' necesita el código de año de libertad para seguir el rastro.",
+            pregunta: "¿En qué año se declaró la Independencia Argentina?",
+            respuesta: "1816",
+            escenario: "Espacio"
+        },
+        {
+            historia: "Pasamos cerca de Marte. Galarza dejó un rastro de cenizas de un cruce histórico.",
+            pregunta: "¿Qué prócer argentino cruzó la Cordillera de los Andes?",
+            respuesta: "san martin",
+            escenario: "Espacio"
+        },
+        {
+            historia: "Galarza se esconde tras un asteroide con forma de pirámide escalonada.",
+            pregunta: "¿Qué civilización antigua construyó la ciudad de Machu Picchu?",
+            respuesta: "incas",
+            escenario: "Espacio"
+        },
+        {
+            historia: "Estamos llegando a Júpiter. Una radio antigua transmite el primer grito de libertad.",
+            pregunta: "¿En qué mes de 1810 ocurrió la formación del primer gobierno patrio?",
+            respuesta: "mayo",
+            escenario: "Espacio"
+        },
+        // MATEMÁTICAS (Escenario: El Sol)
+        {
+            historia: "¡Estamos frente al Sol! Galarza Fonda quiere usar un rayo enfriador. ¡Calcula la distancia!",
+            pregunta: "Si viajamos a 500 km/h por 3 horas, ¿cuántos km recorrimos?",
+            respuesta: "1500",
+            escenario: "Sol"
+        },
+        {
+            historia: "Gallardo necesita repartir raciones de energía para los 11 jugadores del equipo.",
+            pregunta: "Si cada uno necesita 3 raciones, ¿cuántas raciones necesitamos en total?",
+            respuesta: "33",
+            escenario: "Sol"
+        },
+        {
+            historia: "¡Casi lo tenemos! Ajusta el ángulo del rayo capturador.",
+            pregunta: "¿Cómo se llama el ángulo que mide exactamente 90 grados?",
+            respuesta: "recto",
+            escenario: "Sol"
+        },
+        {
+            historia: "¡Último esfuerzo! El código de bloqueo de la nave de Galarza es una cuenta final.",
+            pregunta: "Al doble de 15, súmale 10. ¿Qué número da?",
+            respuesta: "40",
+            escenario: "Sol"
+        }
+    ];
+
+    let indiceActual = 0;
+
+function actualizarPantalla() {
+    if (indiceActual < misterios.length) {
+        // ... (esta parte sigue igual, mostramos preguntas) ...
+        const m = misterios[indiceActual];
+        document.getElementById("story-text").innerText = m.historia;
+        document.getElementById("question-text").innerText = m.pregunta;
+        document.getElementById("current-step").innerText = indiceActual + 1;
+        document.getElementById("user-answer").value = "";
+        
+        let progreso = ((indiceActual) / misterios.length) * 100;
+        document.getElementById("progress-fill").style.width = progreso + "%";
+
+        if(m.escenario === "Espacio") document.body.style.backgroundColor = "#0f0f2d";
+        if(m.escenario === "Sol") document.body.style.backgroundColor = "#4d2a00";
+    } else {
+        // --- ESTA ES LA PARTE QUE CAMBIA PARA MOSTRAR LA IMAGEN ---
+        document.getElementById("game-container").innerHTML = `
+            <h1>🏆 ¡MISIÓN CUMPLIDA! 🏆</h1>
+            <img src="juegoimagen.jpg" alt="Renzo y Gallardo celebran en el Monumental" 
+                 style="max-width: 100%; height: auto; border-radius: 10px; margin-top: 20px; border: 3px solid #ffd700;">
+            <p style="font-size: 1.3rem; margin-top: 20px;">
+               ¡Excelente trabajo, Detective Renzo! Tú y el Muñeco Gallardo capturaron a Galarza Fonda. 
+               El Monumental está a salvo y el Sol vuelve a brillar para River. ¡Sos un campeón!
+            </p>
+                <button onclick="location.reload()" style="margin-top: 20px;">Jugar de nuevo</button>
+                <br>
+                <a href="index.html" style="display: inline-block; margin-top: 12px; color: #ffd700; font-weight: bold;">Volver al menu principal</a>
+        `;
+        // Opcional: Centrar todo el contenedor al final
+        document.getElementById("game-container").style.top = "50%";
+    }
+}
+
+function checkAnswer() {
+    // Tomamos la respuesta, la pasamos a minúsculas y le quitamos espacios
+    let input = document.getElementById("user-answer").value.toLowerCase().trim();
+    
+    // Este truco mágico elimina los acentos de la respuesta del usuario
+    input = input.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    const correcta = misterios[indiceActual].respuesta.toLowerCase();
+
+    // Ahora comparamos sin miedo a los acentos
+    if (input.includes(correcta) || input === correcta) {
+        indiceActual++;
+        actualizarPantalla();
+    } else {
+        alert("❌ ¡Respuesta incorrecta! Galarza Fonda se ríe de lejos. ¡Intentalo de nuevo!");
+    }
+}
+
+    // Inicializar el juego
+    actualizarPantalla();
+
+    // Permitir usar la tecla "Enter" para responder
+    document.getElementById("user-answer").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            checkAnswer();
+        }
+    });
+</script>
+
+</body>
+</html>
