@@ -325,11 +325,11 @@
 
     <details id="full-story">
         <summary>Historia completa de la hormiga</summary>
-        <p>Era la ultima hormiga de la caravana. Un terron de azucar le corto el paso, y con paciencia tuvo que tantear, retroceder, girar y volver a intentar.</p>
-        <p>Logro alzar su carga, pero la ruta estaba llena de letras oscuras, colillas, soplidos y golpes que partian el terron una y otra vez.</p>
-        <p>En cada obstaculo eligio seguir: inspecciono, eligio la porcion mayor, bordeo peligros y cargo incluso un palito mas grande que ella.</p>
-        <p>Cayo al piso, perdio la carga, cruzo hendiduras y recupero el rumbo. A medio metro del zocalo, hasta un pulgar humano parecio decidir su destino.</p>
-        <p>Pero la hormiga avanzo sin desviarse. Finalmente encontro la entrada invisible y volvio al hormiguero, con la caravana intacta.</p>
+        <p>Era la última hormiga de la caravana. Un terrón de azúcar le cortó el paso, y con paciencia tuvo que tantear, retroceder, girar y volver a intentar.</p>
+        <p>Logró alzar su carga, pero la ruta estaba llena de letras oscuras, colillas, soplidos y golpes que partían el terrón una y otra vez.</p>
+        <p>En cada obstáculo eligió seguir: inspeccionó, eligió la porción mayor, bordeó peligros y cargó incluso un palito más grande que ella.</p>
+        <p>Cayó al piso, perdió la carga, cruzó hendiduras y recuperó el rumbo. A medio metro del zócalo, hasta un pulgar humano pareció decidir su destino.</p>
+        <p>Pero la hormiga avanzó sin desviarse. Finalmente encontró la entrada invisible y volvió al hormiguero, con la caravana intacta.</p>
     </details>
 
     <div id="story-text">Cargando aventura...</div>
@@ -338,7 +338,7 @@
         <p id="question-text"></p>
 
         <div id="quiz-ui">
-            <input type="text" id="user-answer" placeholder="Escribe tu respuesta aqui...">
+            <input type="text" id="user-answer" placeholder="Escribe tu respuesta aquí...">
             <br>
             <button onclick="checkAnswer()">Responder</button>
             <p class="hint">Tip: si dudas con acentos, escribe sin acento.</p>
@@ -348,9 +348,9 @@
             <div id="platform-stage">
                 <canvas id="platform-canvas" width="560" height="220"></canvas>
                 <div id="platform-hud">
-                    <span id="hud-sugar">Azucar recogida: 0/3</span>
+                    <span id="hud-sugar">Azúcar recogida: 0/3</span>
                     <span id="hud-lives">Intentos: 3</span>
-                    <span id="hud-goal">Meta: tocar el zocalo</span>
+                    <span id="hud-goal">Meta: tocar el zócalo</span>
                 </div>
                 <div id="platform-message"></div>
                 <button id="start-platform" type="button">Iniciar nivel de ruta</button>
@@ -371,7 +371,7 @@
 
     <div id="progress-bar"><div id="progress-fill"></div></div>
     <p class="stats">Paso <span id="current-step">1</span> de <span id="total-steps">1</span></p>
-    <a class="menu-link" href="index.html">Menu principal</a>
+    <a class="menu-link" href="index.html">Menú principal</a>
 </div>
 
 <script>
@@ -379,78 +379,78 @@
         {
             tipo: "quiz",
             icono: "🐜🍬",
-            historia: "La ultima hormiga queda sola ante un terron que bloquea su ruta sobre el papel color crema.",
-            pregunta: "Que le interceptaba el paso al inicio de la historia?",
-            respuesta: "terron"
+            historia: "La última hormiga queda sola ante un terrón que bloquea su ruta sobre el papel color crema.",
+            pregunta: "¿Qué le bloqueaba el paso a la hormiga?",
+            respuesta: "terrón"
         },
         {
             tipo: "quiz",
             icono: "🔄🐜",
-            historia: "Antes de volver a intentar, la hormiga gira alrededor de si misma con cautela.",
-            pregunta: "En que sentido giro la hormiga? (pista: igual que un reloj)",
-            respuesta: "agujas"
+            historia: "Antes de volver a intentar, la hormiga gira alrededor de sí misma con cautela.",
+            pregunta: "¿Qué hizo la hormiga antes de volver a intentar?",
+            respuesta: "giró"
         },
         {
             tipo: "quiz",
             icono: "⬆️🍬",
-            historia: "Primer intento: falla. Segundo intento: cambia el angulo y alza la carga sobre su cabeza.",
-            pregunta: "Al final, desde que lado acometio la hormiga para poder cargar?",
-            respuesta: "lateralmente"
+            historia: "Primer intento: falla. Segundo intento: cambia el ángulo y alza la carga sobre su cabeza.",
+            pregunta: "¿Qué tuvo que cambiar la hormiga para levantar la carga? Cambió el...",
+            respuesta: "ángulo"
         },
         {
             tipo: "quiz",
             icono: "🔠🐾",
             historia: "La ruta cambia de color y la hormiga cruza una letra oscura en el papel.",
-            pregunta: "Cual fue la primera letra oscura que piso?",
-            respuesta: "n"
+            pregunta: "¿Qué cruzó la hormiga cuando cambió el color de la ruta?",
+            respuesta: "letra"
         },
         {
             tipo: "quiz",
             icono: "🚬🐜",
             historia: "Una colilla aplastada aparece en el camino. La hormiga la bordea con paciencia.",
-            pregunta: "Que obstaculo bordeo lentamente la hormiga?",
+            pregunta: "¿Qué obstáculo bordeó la hormiga con paciencia?",
             respuesta: "colilla"
         },
         {
             tipo: "platform",
             icono: "🎮🐜",
-            historia: "Paso especial: juega el tramo tipo Mario. Ayuda a la hormiga a recoger azucar, esquivar obstaculos y tocar el zocalo.",
+            historia: "Paso especial: juega el tramo tipo Mario. Ayuda a la hormiga a recoger azúcar, esquivar obstáculos y tocar el zócalo.",
             pregunta: "Supera este nivel para seguir la historia.",
             respuesta: ""
         },
         {
             tipo: "quiz",
             icono: "🌬️🌀",
-            historia: "Un soplido hace rodar a la hormiga y el terron se desarma por completo.",
-            pregunta: "Que provocaba esa corriente de aire en la escena?",
-            respuesta: "soplido"
+            historia: "Un soplido hace rodar a la hormiga y el terrón se desarma por completo.",
+            pregunta: "¿Cómo quedó el terrón tras el soplido?",
+            respuesta: "desarmado"
         },
         {
             tipo: "quiz",
             icono: "📏🪵",
-            historia: "Luego aparece un palito de carga, casi tres veces mas grande que la hormiga.",
-            pregunta: "Cuantas veces mas grande era el palito, aproximadamente? (solo numero)",
-            respuesta: "3"
+            historia: "Luego aparece un palito de carga, casi tres veces más grande que la hormiga.",
+            pregunta: "¿Cuántas veces más grande era el palito?",
+            respuesta: "tres"
         },
         {
             tipo: "quiz",
             icono: "🕳️🐜",
             historia: "La carga cae y la hormiga debe cruzar una hendidura profunda entre tablones.",
-            pregunta: "Que profundidad aproximada tenia ese abismo?",
-            respuesta: "centimetro y medio"
+            pregunta: "¿Qué cruzó la hormiga cuando cayó la carga?",
+            respuesta: "hendidura"
         },
         {
             tipo: "quiz",
             icono: "👍⛔",
-            historia: "A dos centimetros de la meta aparece un pulgar humano que se detiene y se retira.",
-            pregunta: "El dedo humano finalmente intervino o no intervino?",
+            historia: "A dos centímetros de la meta aparece un pulgar humano que se detiene y se retira.",
+            pregunta: "¿Intervino el pulgar humano en la ruta de la hormiga?",
             respuesta: "no"
         },
         {
             tipo: "quiz",
             icono: "🏁🐜",
-            historia: "Tras todos los obstaculos, la hormiga encuentra la entrada invisible en el zocalo.",
-            pregunta: "Donde termina entrando finalmente la hormiga?",
+            historia: "Tras todos los obstáculos, la hormiga encuentra la entrada invisible en el zócalo.",
+            pregunta: "¿Dónde termina entrando finalmente la hormiga?",
             respuesta: "hormiguero"
         }
     ];
@@ -524,7 +524,7 @@
             indiceActual++;
             actualizarPantalla();
         } else {
-            alert("No es correcto aun. La hormiga sigue intentando, prueba otra vez.");
+            alert("No es correcto aún. La hormiga sigue intentando, prueba otra vez.");
         }
     }
 
@@ -533,15 +533,15 @@
             <div style="text-align:center;">
                 <h1 style="color:#2f7d52;">¡Meta lograda!</h1>
                 <p style="font-size:1.1rem; line-height:1.5; max-width:640px; margin:10px auto 0;">
-                    La hormiga persistio entre letras oscuras, terrones partidos, soplidos y hendiduras. Nunca perdio la ruta,
-                    y finalmente entro al hormiguero con su carga.
+                    La hormiga persistió entre letras oscuras, terrones partidos, soplidos y hendiduras. Nunca perdió la ruta,
+                    y finalmente entró al hormiguero con su carga.
                 </p>
                 <div style="margin:18px auto; padding:14px; background:#fff7ea; border:2px solid #e3c39a; border-radius:14px; max-width:640px;">
-                    Leccion de la aventura: avanzar no siempre es rapido, pero la constancia tambien abre caminos.
+                    Lección de la aventura: avanzar no siempre es rápido, pero la constancia también abre caminos.
                 </div>
                 <button onclick="location.reload()">Jugar otra vez</button>
                 <br>
-                <a href="index.html" style="display:inline-block; margin-top:12px; color:#6a3e16; font-weight:800;">Volver al menu principal</a>
+                <a href="index.html" style="display:inline-block; margin-top:12px; color:#6a3e16; font-weight:800;">Volver al menú principal</a>
             </div>
         `;
     }
@@ -689,7 +689,7 @@
     }
 
     function updatePlatformHud() {
-        hudSugar.textContent = "Azucar recogida: " + world.sugarCollected + "/" + world.sugarTotal;
+        hudSugar.textContent = "Azúcar recogida: " + world.sugarCollected + "/" + world.sugarTotal;
         hudLives.textContent = "Intentos: " + world.lives;
     }
 
@@ -737,7 +737,7 @@
 
         for (const h of hazards) {
             if (rectOverlap(ant, h)) {
-                loseLife("La hormiga tropieza con un obstaculo.");
+                loseLife("La hormiga tropieza con un obstáculo.");
                 return;
             }
         }
@@ -759,7 +759,7 @@
             if (world.sugarCollected >= world.sugarTotal) {
                 winPlatformLevel();
             } else {
-                platformMsg.textContent = "Falta azucar por recoger antes de llegar al zocalo.";
+                platformMsg.textContent = "Falta azúcar por recoger antes de llegar al zócalo.";
             }
         }
 
