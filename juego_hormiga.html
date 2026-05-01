@@ -616,12 +616,12 @@
     ];
 
     const sugars = [
-        { x: 80, y: 148, r: 6, taken: false },
-        { x: 210, y: 142, r: 6, taken: false },
-        { x: 330, y: 150, r: 6, taken: false },
-        { x: 610, y: 148, r: 6, taken: false },
-        { x: 760, y: 138, r: 6, taken: false },
-        { x: 1038, y: 146, r: 6, taken: false }
+        { x: 80, y: 148, r: 10, taken: false },
+        { x: 210, y: 142, r: 10, taken: false },
+        { x: 330, y: 150, r: 10, taken: false },
+        { x: 610, y: 148, r: 10, taken: false },
+        { x: 760, y: 138, r: 10, taken: false },
+        { x: 1038, y: 146, r: 10, taken: false }
     ];
 
     const goal = { x: 1162, y: 128, w: 20, h: 42 };
@@ -852,12 +852,29 @@
             if (s.taken) continue;
             const drawX = s.x - cameraX;
             if (drawX + s.r < 0 || drawX - s.r > canvas.width) continue;
+
+            // Sombra suave
             ctx.beginPath();
-            ctx.fillStyle = "#fffaf3";
-            ctx.strokeStyle = "#d8c2a1";
+            ctx.fillStyle = "rgba(120, 70, 20, 0.18)";
+            ctx.arc(drawX + 1, s.y + 2, s.r, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Cuerpo del terrón de azúcar
+            ctx.beginPath();
+            ctx.fillStyle = "#fff8e7";
+            ctx.strokeStyle = "#c8860a";
+            ctx.lineWidth = 2;
             ctx.arc(drawX, s.y, s.r, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
+
+            // Brillo interior
+            ctx.beginPath();
+            ctx.fillStyle = "rgba(255,255,255,0.75)";
+            ctx.arc(drawX - s.r * 0.28, s.y - s.r * 0.28, s.r * 0.32, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.lineWidth = 1;
         }
     }
 
