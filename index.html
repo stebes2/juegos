@@ -15,6 +15,8 @@
             --river-dark: #8e1526;
             --abuelo: #2b8cc4;
             --abuelo-dark: #1c5f84;
+            --hormiga: #8d5a2b;
+            --hormiga-dark: #5c3617;
             --card: #fff9ee;
         }
 
@@ -103,6 +105,10 @@
             background: var(--abuelo);
         }
 
+        .hormiga .badge {
+            background: var(--hormiga);
+        }
+
         .card h2 {
             margin: 0 0 8px;
             font-family: 'Baloo 2', 'Comic Sans MS', cursive;
@@ -131,6 +137,10 @@
 
         .abuelo .play-btn {
             background: linear-gradient(135deg, var(--abuelo), var(--abuelo-dark));
+        }
+
+        .hormiga .play-btn {
+            background: linear-gradient(135deg, var(--hormiga), var(--hormiga-dark));
         }
 
         .play-btn:hover {
@@ -197,6 +207,13 @@
                 <h2>El Celular del Abuelo</h2>
                 <p>Acompana a Alejo en una historia emotiva para resolver desafios y fortalecer el vinculo con su abuelo.</p>
                 <a class="play-btn" href="juego_abuelo.html">Jugar El Celular del Abuelo</a>
+            </article>
+
+            <article class="card hormiga">
+                <span class="badge">Aventura 3</span>
+                <h2>La Hormiga Persistente</h2>
+                <p>Supera preguntas de comprension y un nivel de plataforma tipo Mario para ayudar a la hormiga a llegar al hormiguero.</p>
+                <a class="play-btn" href="juego_hormiga.html">Jugar La Hormiga Persistente</a>
             </article>
         </section>
 

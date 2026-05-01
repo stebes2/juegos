@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Hormiga Persistente: Ruta al Hormiguero</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@500;700&display=swap');
+
+        :root {
+            --bg-a: #f7e6c6;
+            --bg-b: #e9cf9e;
+            --ink: #2f2418;
+            --earth: #9a6b3d;
+            --leaf: #2f7d52;
+            --alert: #b32a2a;
+            --panel: rgba(255, 250, 240, 0.94);
+            --paper: #fff7ea;
+            --trail: #d89d57;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Nunito', 'Trebuchet MS', sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.56), transparent 35%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.35), transparent 33%),
+                linear-gradient(135deg, var(--bg-a), var(--bg-b));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #game-container {
+            width: min(920px, 100%);
+            background: var(--panel);
+            border: 3px solid rgba(47, 36, 24, 0.25);
+            border-radius: 24px;
+            box-shadow: 0 18px 40px rgba(47, 36, 24, 0.22);
+            padding: 22px;
+            animation: popIn 520ms ease-out;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: 'Baloo 2', 'Comic Sans MS', cursive;
+            line-height: 1;
+            font-size: clamp(1.9rem, 4vw, 2.7rem);
+            color: #6f3e1c;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin: 8px 0 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #6a4a29;
+        }
+
+        #scene-icon {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 6px;
+        }
+
+        #full-story {
+            background: var(--paper);
+            border: 2px solid #f0d7b1;
+            border-radius: 14px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            max-height: 210px;
+            overflow: auto;
+        }
+
+        #full-story summary {
+            cursor: pointer;
+            font-weight: 800;
+            color: #7d4f23;
+            margin-bottom: 6px;
+        }
+
+        #full-story p {
+            margin: 0 0 10px;
+            line-height: 1.45;
+        }
+
+        #story-text {
+            background: #fffaf2;
+            border: 2px solid #ebd8bd;
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 1.06rem;
+            line-height: 1.5;
+            min-height: 105px;
+            margin-bottom: 14px;
+        }
+
+        #challenge-box {
+            background: #f6ecdf;
+            border: 2px dashed #d9b68c;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        #question-text {
+            margin: 0 0 10px;
+            font-weight: 800;
+            color: #5f3c1e;
+            font-size: 1.03rem;
+        }
+
+        #quiz-ui {
+            display: block;
+        }
+
+        #platform-ui {
+            display: none;
+        }
+
+        input {
+            width: 100%;
+            max-width: 420px;
+            border: 2px solid #d6b48b;
+            border-radius: 10px;
+            padding: 11px 12px;
+            font-size: 1rem;
+            outline: none;
+            margin-bottom: 10px;
+            background: #fff;
+        }
+
+        input:focus {
+            border-color: #a06a36;
+            box-shadow: 0 0 0 3px rgba(160, 106, 54, 0.18);
+        }
+
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 11px 18px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            background: linear-gradient(135deg, #b26c2a, #8d4d1d);
+            color: #fff;
+            transition: transform 140ms ease, filter 140ms ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px) scale(1.01);
+            filter: brightness(1.06);
+        }
+
+        .hint {
+            margin-top: 8px;
+            font-size: 0.94rem;
+            color: #6d5032;
+            font-weight: 700;
+        }
+
+        #platform-stage {
+            width: 100%;
+            max-width: 620px;
+            margin: 0 auto;
+            border-radius: 14px;
+            border: 2px solid #ad7d4b;
+            background: #f7e2bf;
+            padding: 10px;
+        }
+
+        #platform-canvas {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            background: linear-gradient(#f8e8cb, #e7b97b);
+            border: 2px solid #c39057;
+        }
+
+        #platform-hud {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 8px;
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #5e3b1d;
+            flex-wrap: wrap;
+        }
+
+        #platform-message {
+            margin-top: 8px;
+            font-weight: 800;
+            color: var(--alert);
+            min-height: 22px;
+        }
+
+        .continue-wrap {
+            margin-top: 8px;
+            display: none;
+        }
+
+        #progress-bar {
+            width: 100%;
+            height: 12px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: #e8d2b6;
+            margin-top: 12px;
+        }
+
+        #progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--leaf), #6ab26f);
+            transition: width 380ms ease;
+        }
+
+        .stats {
+            margin-top: 8px;
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #6a4a29;
+        }
+
+        .menu-link {
+            display: inline-block;
+            margin-top: 12px;
+            font-weight: 800;
+            color: #6a3e16;
+            text-decoration: none;
+        }
+
+        .menu-link:hover { text-decoration: underline; }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.99);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 680px) {
+            #game-container {
+                padding: 16px;
+                border-radius: 18px;
+            }
+
+            #story-text {
+                min-height: 120px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="game-container">
+    <div id="scene-icon">🐜🍬</div>
+    <h1>La Hormiga Persistente</h1>
+    <p class="subtitle">Aventura de preguntas y habilidad hasta llegar al hormiguero.</p>
+
+    <details id="full-story">
+        <summary>Historia completa de la hormiga</summary>
+        <p>Era la ultima hormiga de la caravana. Un terron de azucar le corto el paso, y con paciencia tuvo que tantear, retroceder, girar y volver a intentar.</p>
+        <p>Logro alzar su carga, pero la ruta estaba llena de letras oscuras, colillas, soplidos y golpes que partian el terron una y otra vez.</p>
+        <p>En cada obstaculo eligio seguir: inspecciono, eligio la porcion mayor, bordeo peligros y cargo incluso un palito mas grande que ella.</p>
+        <p>Cayo al piso, perdio la carga, cruzo hendiduras y recupero el rumbo. A medio metro del zocalo, hasta un pulgar humano parecio decidir su destino.</p>
+        <p>Pero la hormiga avanzo sin desviarse. Finalmente encontro la entrada invisible y volvio al hormiguero, con la caravana intacta.</p>
+    </details>
+
+    <div id="story-text">Cargando aventura...</div>
+
+    <div id="challenge-box">
+        <p id="question-text"></p>
+
+        <div id="quiz-ui">
+            <input type="text" id="user-answer" placeholder="Escribe tu respuesta aqui...">
+            <br>
+            <button onclick="checkAnswer()">Responder</button>
+            <p class="hint">Tip: si dudas con acentos, escribe sin acento.</p>
+        </div>
+
+        <div id="platform-ui">
+            <div id="platform-stage">
+                <canvas id="platform-canvas" width="560" height="220"></canvas>
+                <div id="platform-hud">
+                    <span id="hud-sugar">Azucar recogida: 0/3</span>
+                    <span id="hud-lives">Intentos: 3</span>
+                    <span id="hud-goal">Meta: tocar el zocalo</span>
+                </div>
+                <div id="platform-message"></div>
+                <button id="start-platform" type="button">Iniciar nivel de ruta</button>
+                <div class="continue-wrap" id="continue-wrap">
+                    <button id="continue-after-platform" type="button">Continuar historia</button>
+                </div>
+            </div>
+            <p class="hint">Controles: mover con flechas o A/D, saltar con espacio o W.</p>
+        </div>
+    </div>
+
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+    <p class="stats">Paso <span id="current-step">1</span> de <span id="total-steps">1</span></p>
+    <a class="menu-link" href="index.html">Menu principal</a>
+</div>
+
+<script>
+    const pasos = [
+        {
+            tipo: "quiz",
+            icono: "🐜🍬",
+            historia: "La ultima hormiga queda sola ante un terron que bloquea su ruta sobre el papel color crema.",
+            pregunta: "Que le interceptaba el paso al inicio de la historia?",
+            respuesta: "terron"
+        },
+        {
+            tipo: "quiz",
+            icono: "🔄🐜",
+            historia: "Antes de volver a intentar, la hormiga gira alrededor de si misma con cautela.",
+            pregunta: "En que sentido giro la hormiga? (pista: igual que un reloj)",
+            respuesta: "agujas"
+        },
+        {
+            tipo: "quiz",
+            icono: "⬆️🍬",
+            historia: "Primer intento: falla. Segundo intento: cambia el angulo y alza la carga sobre su cabeza.",
+            pregunta: "Al final, desde que lado acometio la hormiga para poder cargar?",
+            respuesta: "lateralmente"
+        },
+        {
+            tipo: "quiz",
+            icono: "🔠🐾",
+            historia: "La ruta cambia de color y la hormiga cruza una letra oscura en el papel.",
+            pregunta: "Cual fue la primera letra oscura que piso?",
+            respuesta: "n"
+        },
+        {
+            tipo: "quiz",
+            icono: "🚬🐜",
+            historia: "Una colilla aplastada aparece en el camino. La hormiga la bordea con paciencia.",
+            pregunta: "Que obstaculo bordeo lentamente la hormiga?",
+            respuesta: "colilla"
+        },
+        {
+            tipo: "platform",
+            icono: "🎮🐜",
+            historia: "Paso especial: juega el tramo tipo Mario. Ayuda a la hormiga a recoger azucar, esquivar obstaculos y tocar el zocalo.",
+            pregunta: "Supera este nivel para seguir la historia.",
+            respuesta: ""
+        },
+        {
+            tipo: "quiz",
+            icono: "🌬️🌀",
+            historia: "Un soplido hace rodar a la hormiga y el terron se desarma por completo.",
+            pregunta: "Que provocaba esa corriente de aire en la escena?",
+            respuesta: "soplido"
+        },
+        {
+            tipo: "quiz",
+            icono: "📏🪵",
+            historia: "Luego aparece un palito de carga, casi tres veces mas grande que la hormiga.",
+            pregunta: "Cuantas veces mas grande era el palito, aproximadamente? (solo numero)",
+            respuesta: "3"
+        },
+        {
+            tipo: "quiz",
+            icono: "🕳️🐜",
+            historia: "La carga cae y la hormiga debe cruzar una hendidura profunda entre tablones.",
+            pregunta: "Que profundidad aproximada tenia ese abismo?",
+            respuesta: "centimetro y medio"
+        },
+        {
+            tipo: "quiz",
+            icono: "👍⛔",
+            historia: "A dos centimetros de la meta aparece un pulgar humano que se detiene y se retira.",
+            pregunta: "El dedo humano finalmente intervino o no intervino?",
+            respuesta: "no"
+        },
+        {
+            tipo: "quiz",
+            icono: "🏁🐜",
+            historia: "Tras todos los obstaculos, la hormiga encuentra la entrada invisible en el zocalo.",
+            pregunta: "Donde termina entrando finalmente la hormiga?",
+            respuesta: "hormiguero"
+        }
+    ];
+
+    const totalSteps = pasos.length;
+    let indiceActual = 0;
+
+    const sceneIcon = document.getElementById("scene-icon");
+    const storyText = document.getElementById("story-text");
+    const questionText = document.getElementById("question-text");
+    const userAnswer = document.getElementById("user-answer");
+    const progressFill = document.getElementById("progress-fill");
+    const currentStep = document.getElementById("current-step");
+    const totalStepsEl = document.getElementById("total-steps");
+    const quizUi = document.getElementById("quiz-ui");
+    const platformUi = document.getElementById("platform-ui");
+
+    totalStepsEl.textContent = totalSteps;
+
+    function normalizeText(text) {
+        return text
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9\s]/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function actualizarPantalla() {
+        if (indiceActual >= totalSteps) {
+            showFinalScreen();
+            return;
+        }
+
+        const paso = pasos[indiceActual];
+        sceneIcon.textContent = paso.icono;
+        storyText.textContent = paso.historia;
+        questionText.textContent = paso.pregunta;
+        currentStep.textContent = indiceActual + 1;
+        progressFill.style.width = ((indiceActual / totalSteps) * 100) + "%";
+
+        if (paso.tipo === "platform") {
+            quizUi.style.display = "none";
+            platformUi.style.display = "block";
+            prepararNivelHormiga();
+        } else {
+            quizUi.style.display = "block";
+            platformUi.style.display = "none";
+            userAnswer.value = "";
+            userAnswer.focus();
+        }
+    }
+
+    function checkAnswer() {
+        if (indiceActual >= totalSteps) return;
+
+        const paso = pasos[indiceActual];
+        if (paso.tipo !== "quiz") return;
+
+        const input = normalizeText(userAnswer.value);
+        const correcta = normalizeText(paso.respuesta);
+
+        if (!input) {
+            alert("Escribe una respuesta para avanzar.");
+            return;
+        }
+
+        const acierta = input === correcta || input.includes(correcta) || correcta.includes(input);
+        if (acierta) {
+            indiceActual++;
+            actualizarPantalla();
+        } else {
+            alert("No es correcto aun. La hormiga sigue intentando, prueba otra vez.");
+        }
+    }
+
+    function showFinalScreen() {
+        document.getElementById("game-container").innerHTML = `
+            <div style="text-align:center;">
+                <h1 style="color:#2f7d52;">¡Meta lograda!</h1>
+                <p style="font-size:1.1rem; line-height:1.5; max-width:640px; margin:10px auto 0;">
+                    La hormiga persistio entre letras oscuras, terrones partidos, soplidos y hendiduras. Nunca perdio la ruta,
+                    y finalmente entro al hormiguero con su carga.
+                </p>
+                <div style="margin:18px auto; padding:14px; background:#fff7ea; border:2px solid #e3c39a; border-radius:14px; max-width:640px;">
+                    Leccion de la aventura: avanzar no siempre es rapido, pero la constancia tambien abre caminos.
+                </div>
+                <button onclick="location.reload()">Jugar otra vez</button>
+                <br>
+                <a href="index.html" style="display:inline-block; margin-top:12px; color:#6a3e16; font-weight:800;">Volver al menu principal</a>
+            </div>
+        `;
+    }
+
+    userAnswer.addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            checkAnswer();
+        }
+    });
+
+    // Nivel de plataforma tipo Mario con hormiga.
+    const canvas = document.getElementById("platform-canvas");
+    const ctx = canvas.getContext("2d");
+    const startBtn = document.getElementById("start-platform");
+    const continueWrap = document.getElementById("continue-wrap");
+    const continueBtn = document.getElementById("continue-after-platform");
+    const hudSugar = document.getElementById("hud-sugar");
+    const hudLives = document.getElementById("hud-lives");
+    const platformMsg = document.getElementById("platform-message");
+
+    let gameLoopId = null;
+    let gameActive = false;
+    let levelWon = false;
+
+    const keys = { left: false, right: false, jump: false };
+
+    const world = {
+        gravity: 0.45,
+        friction: 0.82,
+        width: canvas.width,
+        height: canvas.height,
+        startX: 26,
+        startY: 154,
+        lives: 3,
+        sugarTotal: 3,
+        sugarCollected: 0
+    };
+
+    const ant = {
+        x: world.startX,
+        y: world.startY,
+        w: 20,
+        h: 16,
+        vx: 0,
+        vy: 0,
+        speed: 1.5,
+        jumpPower: -7.5,
+        onGround: false
+    };
+
+    const platforms = [
+        { x: 0, y: 182, w: 130, h: 38, kind: "paper" },
+        { x: 152, y: 174, w: 96, h: 46, kind: "letter" },
+        { x: 272, y: 184, w: 116, h: 36, kind: "wood" },
+        { x: 414, y: 170, w: 146, h: 50, kind: "wood" }
+    ];
+
+    const hazards = [
+        { x: 118, y: 166, w: 20, h: 16, type: "pucho" },
+        { x: 246, y: 172, w: 18, h: 10, type: "gap" },
+        { x: 394, y: 174, w: 14, h: 12, type: "gap" }
+    ];
+
+    const sugars = [
+        { x: 80, y: 148, r: 6, taken: false },
+        { x: 210, y: 142, r: 6, taken: false },
+        { x: 330, y: 150, r: 6, taken: false }
+    ];
+
+    const goal = { x: 534, y: 128, w: 20, h: 42 };
+
+    function prepararNivelHormiga() {
+        stopPlatformLoop();
+        resetLevelState();
+        drawPlatformFrame();
+        platformMsg.textContent = "Completa el nivel para avanzar.";
+        startBtn.style.display = "inline-block";
+        continueWrap.style.display = "none";
+        levelWon = false;
+    }
+
+    function resetLevelState() {
+        ant.x = world.startX;
+        ant.y = world.startY;
+        ant.vx = 0;
+        ant.vy = 0;
+        ant.onGround = false;
+
+        world.lives = 3;
+        world.sugarCollected = 0;
+        sugars.forEach(s => { s.taken = false; });
+        updatePlatformHud();
+    }
+
+    function startPlatformLevel() {
+        if (levelWon) return;
+        if (gameActive) return;
+        gameActive = true;
+        platformMsg.textContent = "";
+        startBtn.style.display = "none";
+        gameLoopId = requestAnimationFrame(platformLoop);
+    }
+
+    function stopPlatformLoop() {
+        if (gameLoopId) {
+            cancelAnimationFrame(gameLoopId);
+            gameLoopId = null;
+        }
+        gameActive = false;
+    }
+
+    function loseLife(reason) {
+        world.lives -= 1;
+        updatePlatformHud();
+
+        if (world.lives <= 0) {
+            stopPlatformLoop();
+            platformMsg.textContent = "Te quedaste sin intentos. Pulsa Iniciar nivel de ruta para reintentar.";
+            startBtn.style.display = "inline-block";
+            resetLevelState();
+            drawPlatformFrame();
+            return;
+        }
+
+        platformMsg.textContent = reason + " Intentos restantes: " + world.lives;
+        ant.x = world.startX;
+        ant.y = world.startY;
+        ant.vx = 0;
+        ant.vy = 0;
+    }
+
+    function updatePlatformHud() {
+        hudSugar.textContent = "Azucar recogida: " + world.sugarCollected + "/" + world.sugarTotal;
+        hudLives.textContent = "Intentos: " + world.lives;
+    }
+
+    function platformLoop() {
+        updatePlatformPhysics();
+        drawPlatformFrame();
+
+        if (gameActive) {
+            gameLoopId = requestAnimationFrame(platformLoop);
+        }
+    }
+
+    function updatePlatformPhysics() {
+        if (keys.left) ant.vx -= ant.speed;
+        if (keys.right) ant.vx += ant.speed;
+
+        ant.vx *= world.friction;
+        ant.vx = Math.max(-3.2, Math.min(3.2, ant.vx));
+
+        if (keys.jump && ant.onGround) {
+            ant.vy = ant.jumpPower;
+            ant.onGround = false;
+        }
+
+        ant.vy += world.gravity;
+
+        ant.x += ant.vx;
+        ant.y += ant.vy;
+
+        if (ant.x < 0) ant.x = 0;
+        if (ant.x + ant.w > world.width) ant.x = world.width - ant.w;
+
+        ant.onGround = false;
+        for (const p of platforms) {
+            const wasAbove = ant.y + ant.h - ant.vy <= p.y;
+            const hitX = ant.x + ant.w > p.x && ant.x < p.x + p.w;
+            const hitY = ant.y + ant.h >= p.y && ant.y + ant.h <= p.y + p.h;
+
+            if (hitX && hitY && wasAbove && ant.vy >= 0) {
+                ant.y = p.y - ant.h;
+                ant.vy = 0;
+                ant.onGround = true;
+            }
+        }
+
+        for (const h of hazards) {
+            if (rectOverlap(ant, h)) {
+                loseLife("La hormiga tropieza con un obstaculo.");
+                return;
+            }
+        }
+
+        if (ant.y > world.height + 12) {
+            loseLife("La hormiga cae de la ruta.");
+            return;
+        }
+
+        for (const s of sugars) {
+            if (!s.taken && circleRectOverlap(s, ant)) {
+                s.taken = true;
+                world.sugarCollected += 1;
+                updatePlatformHud();
+            }
+        }
+
+        if (rectOverlap(ant, goal)) {
+            if (world.sugarCollected >= world.sugarTotal) {
+                winPlatformLevel();
+            } else {
+                platformMsg.textContent = "Falta azucar por recoger antes de llegar al zocalo.";
+            }
+        }
+    }
+
+    function winPlatformLevel() {
+        stopPlatformLoop();
+        levelWon = true;
+        platformMsg.textContent = "Nivel superado. La hormiga retoma su ruta.";
+        continueWrap.style.display = "block";
+    }
+
+    function drawPlatformFrame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawBackgroundScene();
+        drawPlatforms();
+        drawHazards();
+        drawSugars();
+        drawGoal();
+        drawAnt();
+    }
+
+    function drawBackgroundScene() {
+        ctx.fillStyle = "#f9e9cd";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "rgba(145, 80, 38, 0.15)";
+        ctx.fillRect(0, 188, canvas.width, 32);
+
+        ctx.fillStyle = "rgba(120, 68, 26, 0.2)";
+        ctx.font = "bold 52px sans-serif";
+        ctx.fillText("N", 158, 172);
+        ctx.fillText("A", 426, 166);
+    }
+
+    function drawPlatforms() {
+        for (const p of platforms) {
+            if (p.kind === "paper") ctx.fillStyle = "#f4dbb5";
+            if (p.kind === "letter") ctx.fillStyle = "#d8a66d";
+            if (p.kind === "wood") ctx.fillStyle = "#b47a44";
+            ctx.fillRect(p.x, p.y, p.w, p.h);
+
+            ctx.strokeStyle = "rgba(98, 56, 25, 0.6)";
+            ctx.strokeRect(p.x, p.y, p.w, p.h);
+        }
+    }
+
+    function drawHazards() {
+        for (const h of hazards) {
+            if (h.type === "pucho") {
+                ctx.fillStyle = "#665144";
+                ctx.fillRect(h.x, h.y, h.w, h.h);
+                ctx.fillStyle = "#d7c4ad";
+                ctx.fillRect(h.x + 2, h.y + 3, h.w - 4, h.h - 6);
+            } else {
+                ctx.fillStyle = "#6d4a30";
+                ctx.fillRect(h.x, h.y, h.w, h.h);
+            }
+        }
+    }
+
+    function drawSugars() {
+        for (const s of sugars) {
+            if (s.taken) continue;
+            ctx.beginPath();
+            ctx.fillStyle = "#fffaf3";
+            ctx.strokeStyle = "#d8c2a1";
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+        }
+    }
+
+    function drawGoal() {
+        ctx.fillStyle = "#6f4220";
+        ctx.fillRect(goal.x, goal.y, goal.w, goal.h);
+        ctx.fillStyle = "#2f1c0f";
+        ctx.fillRect(goal.x + 6, goal.y + 8, 8, 26);
+        ctx.fillStyle = "#ffd36b";
+        ctx.beginPath();
+        ctx.arc(goal.x + 16, goal.y + 20, 2, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    function drawAnt() {
+        const x = ant.x;
+        const y = ant.y;
+
+        ctx.fillStyle = "#321f13";
+        ctx.beginPath();
+        ctx.ellipse(x + 6, y + 8, 5, 4, 0, 0, Math.PI * 2);
+        ctx.ellipse(x + 12, y + 8, 5, 4, 0, 0, Math.PI * 2);
+        ctx.ellipse(x + 17, y + 8, 4.2, 3.4, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "#2a170d";
+        ctx.lineWidth = 1.5;
+        for (let i = 0; i < 3; i++) {
+            const ly = y + 5 + i * 4;
+            ctx.beginPath();
+            ctx.moveTo(x + 8, ly);
+            ctx.lineTo(x + 2, ly - 3);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(x + 10, ly);
+            ctx.lineTo(x + 17, ly - 3);
+            ctx.stroke();
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(x + 18, y + 5);
+        ctx.lineTo(x + 22, y + 1);
+        ctx.moveTo(x + 18, y + 7);
+        ctx.lineTo(x + 22, y + 8);
+        ctx.stroke();
+    }
+
+    function rectOverlap(a, b) {
+        return a.x < b.x + b.w &&
+               a.x + a.w > b.x &&
+               a.y < b.y + b.h &&
+               a.y + a.h > b.y;
+    }
+
+    function circleRectOverlap(c, r) {
+        const nearestX = Math.max(r.x, Math.min(c.x, r.x + r.w));
+        const nearestY = Math.max(r.y, Math.min(c.y, r.y + r.h));
+        const dx = c.x - nearestX;
+        const dy = c.y - nearestY;
+        return (dx * dx + dy * dy) <= (c.r * c.r);
+    }
+
+    function avanzarTrasNivel() {
+        if (!levelWon) return;
+        continueWrap.style.display = "none";
+        indiceActual++;
+        actualizarPantalla();
+    }
+
+    startBtn.addEventListener("click", startPlatformLevel);
+    continueBtn.addEventListener("click", avanzarTrasNivel);
+
+    document.addEventListener("keydown", (event) => {
+        const target = event.target;
+        const isTypingField = target && (
+            target.tagName === "INPUT" ||
+            target.tagName === "TEXTAREA" ||
+            target.isContentEditable
+        );
+
+        if (isTypingField) {
+            return;
+        }
+
+        const key = event.key.toLowerCase();
+        if (key === "arrowleft" || key === "a") keys.left = true;
+        if (key === "arrowright" || key === "d") keys.right = true;
+        if (key === " " || key === "w" || key === "arrowup") {
+            keys.jump = true;
+            event.preventDefault();
+        }
+    });
+
+    document.addEventListener("keyup", (event) => {
+        const key = event.key.toLowerCase();
+        if (key === "arrowleft" || key === "a") keys.left = false;
+        if (key === "arrowright" || key === "d") keys.right = false;
+        if (key === " " || key === "w" || key === "arrowup") keys.jump = false;
+    });
+
+    actualizarPantalla();
+</script>
+</body>
+</html>
