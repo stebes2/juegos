@@ -174,6 +174,7 @@
             border: 2px solid #ad7d4b;
             background: #f7e2bf;
             padding: 10px;
+            overflow: hidden;
         }
 
         #platform-canvas {
@@ -201,6 +202,39 @@
             font-weight: 800;
             color: var(--alert);
             min-height: 22px;
+        }
+
+        .touch-controls {
+            display: none;
+            margin-top: 10px;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .touch-move {
+            display: flex;
+            gap: 8px;
+        }
+
+        .touch-btn {
+            min-width: 68px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            background: linear-gradient(135deg, #9f5c24, #7c3f15);
+            color: #fff;
+            font-weight: 800;
+            font-size: 1rem;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        .touch-btn:active,
+        .touch-btn.is-pressed {
+            transform: translateY(1px) scale(0.99);
+            filter: brightness(0.92);
         }
 
         .continue-wrap {
@@ -265,6 +299,21 @@
             button {
                 width: 100%;
             }
+
+            .touch-controls {
+                display: flex;
+            }
+
+            .touch-btn {
+                min-width: 58px;
+                padding: 11px 12px;
+            }
+        }
+
+        @media (pointer: coarse) {
+            .touch-controls {
+                display: flex;
+            }
         }
     </style>
 </head>
@@ -307,6 +356,13 @@
                 <button id="start-platform" type="button">Iniciar nivel de ruta</button>
                 <div class="continue-wrap" id="continue-wrap">
                     <button id="continue-after-platform" type="button">Continuar historia</button>
+                </div>
+                <div class="touch-controls" id="touch-controls">
+                    <div class="touch-move">
+                        <button class="touch-btn" type="button" data-control="left">◀</button>
+                        <button class="touch-btn" type="button" data-control="right">▶</button>
+                    </div>
+                    <button class="touch-btn" type="button" data-control="jump">Saltar</button>
                 </div>
             </div>
             <p class="hint">Controles: mover con flechas o A/D, saltar con espacio o W.</p>
@@ -505,22 +561,24 @@
     const hudSugar = document.getElementById("hud-sugar");
     const hudLives = document.getElementById("hud-lives");
     const platformMsg = document.getElementById("platform-message");
+    const touchControls = document.getElementById("touch-controls");
 
     let gameLoopId = null;
     let gameActive = false;
     let levelWon = false;
+    let cameraX = 0;
 
     const keys = { left: false, right: false, jump: false };
 
     const world = {
         gravity: 0.45,
         friction: 0.82,
-        width: canvas.width,
+        width: 1240,
         height: canvas.height,
         startX: 26,
         startY: 154,
         lives: 3,
-        sugarTotal: 3,
+        sugarTotal: 6,
         sugarCollected: 0
     };
 
@@ -540,22 +598,33 @@
         { x: 0, y: 182, w: 130, h: 38, kind: "paper" },
         { x: 152, y: 174, w: 96, h: 46, kind: "letter" },
         { x: 272, y: 184, w: 116, h: 36, kind: "wood" },
-        { x: 414, y: 170, w: 146, h: 50, kind: "wood" }
+        { x: 414, y: 170, w: 120, h: 50, kind: "wood" },
+        { x: 566, y: 180, w: 110, h: 40, kind: "paper" },
+        { x: 712, y: 170, w: 95, h: 50, kind: "letter" },
+        { x: 848, y: 186, w: 130, h: 34, kind: "wood" },
+        { x: 1004, y: 174, w: 190, h: 46, kind: "wood" }
     ];
 
     const hazards = [
         { x: 118, y: 166, w: 20, h: 16, type: "pucho" },
         { x: 246, y: 172, w: 18, h: 10, type: "gap" },
-        { x: 394, y: 174, w: 14, h: 12, type: "gap" }
+        { x: 394, y: 174, w: 14, h: 12, type: "gap" },
+        { x: 538, y: 170, w: 16, h: 12, type: "gap" },
+        { x: 684, y: 176, w: 16, h: 12, type: "pucho" },
+        { x: 816, y: 174, w: 18, h: 12, type: "gap" },
+        { x: 982, y: 178, w: 18, h: 10, type: "pucho" }
     ];
 
     const sugars = [
         { x: 80, y: 148, r: 6, taken: false },
         { x: 210, y: 142, r: 6, taken: false },
-        { x: 330, y: 150, r: 6, taken: false }
+        { x: 330, y: 150, r: 6, taken: false },
+        { x: 610, y: 148, r: 6, taken: false },
+        { x: 760, y: 138, r: 6, taken: false },
+        { x: 1038, y: 146, r: 6, taken: false }
     ];
 
-    const goal = { x: 534, y: 128, w: 20, h: 42 };
+    const goal = { x: 1162, y: 128, w: 20, h: 42 };
 
     function prepararNivelHormiga() {
         stopPlatformLoop();
@@ -573,9 +642,11 @@
         ant.vx = 0;
         ant.vy = 0;
         ant.onGround = false;
+        cameraX = 0;
 
         world.lives = 3;
         world.sugarCollected = 0;
+        world.sugarTotal = sugars.length;
         sugars.forEach(s => { s.taken = false; });
         updatePlatformHud();
     }
@@ -691,6 +762,13 @@
                 platformMsg.textContent = "Falta azucar por recoger antes de llegar al zocalo.";
             }
         }
+
+        updateCamera();
+    }
+
+    function updateCamera() {
+        const desiredX = ant.x - canvas.width * 0.35;
+        cameraX = Math.max(0, Math.min(desiredX, world.width - canvas.width));
     }
 
     function winPlatformLevel() {
@@ -720,32 +798,51 @@
 
         ctx.fillStyle = "rgba(120, 68, 26, 0.2)";
         ctx.font = "bold 52px sans-serif";
-        ctx.fillText("N", 158, 172);
-        ctx.fillText("A", 426, 166);
+        const letters = [
+            { x: 158, y: 172, txt: "N" },
+            { x: 426, y: 166, txt: "A" },
+            { x: 736, y: 168, txt: "H" },
+            { x: 1024, y: 166, txt: "R" }
+        ];
+        for (const item of letters) {
+            const drawX = item.x - cameraX;
+            if (drawX > -60 && drawX < canvas.width + 60) {
+                ctx.fillText(item.txt, drawX, item.y);
+            }
+        }
+
+        ctx.fillStyle = "rgba(122, 70, 24, 0.22)";
+        for (let x = -cameraX % 120; x < canvas.width + 120; x += 120) {
+            ctx.fillRect(x, 194, 68, 6);
+        }
     }
 
     function drawPlatforms() {
         for (const p of platforms) {
+            const drawX = p.x - cameraX;
+            if (drawX + p.w < 0 || drawX > canvas.width) continue;
             if (p.kind === "paper") ctx.fillStyle = "#f4dbb5";
             if (p.kind === "letter") ctx.fillStyle = "#d8a66d";
             if (p.kind === "wood") ctx.fillStyle = "#b47a44";
-            ctx.fillRect(p.x, p.y, p.w, p.h);
+            ctx.fillRect(drawX, p.y, p.w, p.h);
 
             ctx.strokeStyle = "rgba(98, 56, 25, 0.6)";
-            ctx.strokeRect(p.x, p.y, p.w, p.h);
+            ctx.strokeRect(drawX, p.y, p.w, p.h);
         }
     }
 
     function drawHazards() {
         for (const h of hazards) {
+            const drawX = h.x - cameraX;
+            if (drawX + h.w < 0 || drawX > canvas.width) continue;
             if (h.type === "pucho") {
                 ctx.fillStyle = "#665144";
-                ctx.fillRect(h.x, h.y, h.w, h.h);
+                ctx.fillRect(drawX, h.y, h.w, h.h);
                 ctx.fillStyle = "#d7c4ad";
-                ctx.fillRect(h.x + 2, h.y + 3, h.w - 4, h.h - 6);
+                ctx.fillRect(drawX + 2, h.y + 3, h.w - 4, h.h - 6);
             } else {
                 ctx.fillStyle = "#6d4a30";
-                ctx.fillRect(h.x, h.y, h.w, h.h);
+                ctx.fillRect(drawX, h.y, h.w, h.h);
             }
         }
     }
@@ -753,28 +850,32 @@
     function drawSugars() {
         for (const s of sugars) {
             if (s.taken) continue;
+            const drawX = s.x - cameraX;
+            if (drawX + s.r < 0 || drawX - s.r > canvas.width) continue;
             ctx.beginPath();
             ctx.fillStyle = "#fffaf3";
             ctx.strokeStyle = "#d8c2a1";
-            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.arc(drawX, s.y, s.r, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
         }
     }
 
     function drawGoal() {
+        const drawX = goal.x - cameraX;
+        if (drawX + goal.w < 0 || drawX > canvas.width) return;
         ctx.fillStyle = "#6f4220";
-        ctx.fillRect(goal.x, goal.y, goal.w, goal.h);
+        ctx.fillRect(drawX, goal.y, goal.w, goal.h);
         ctx.fillStyle = "#2f1c0f";
-        ctx.fillRect(goal.x + 6, goal.y + 8, 8, 26);
+        ctx.fillRect(drawX + 6, goal.y + 8, 8, 26);
         ctx.fillStyle = "#ffd36b";
         ctx.beginPath();
-        ctx.arc(goal.x + 16, goal.y + 20, 2, 0, Math.PI * 2);
+        ctx.arc(drawX + 16, goal.y + 20, 2, 0, Math.PI * 2);
         ctx.fill();
     }
 
     function drawAnt() {
-        const x = ant.x;
+        const x = ant.x - cameraX;
         const y = ant.y;
 
         ctx.fillStyle = "#321f13";
@@ -831,6 +932,42 @@
 
     startBtn.addEventListener("click", startPlatformLevel);
     continueBtn.addEventListener("click", avanzarTrasNivel);
+
+    function setControlState(control, isPressed, button) {
+        if (!keys.hasOwnProperty(control)) return;
+        keys[control] = isPressed;
+        if (button) {
+            button.classList.toggle("is-pressed", isPressed);
+        }
+    }
+
+    touchControls.querySelectorAll("[data-control]").forEach((btn) => {
+        const control = btn.dataset.control;
+
+        btn.addEventListener("pointerdown", (event) => {
+            event.preventDefault();
+            setControlState(control, true, btn);
+        });
+
+        btn.addEventListener("pointerup", (event) => {
+            event.preventDefault();
+            setControlState(control, false, btn);
+        });
+
+        btn.addEventListener("pointercancel", () => {
+            setControlState(control, false, btn);
+        });
+
+        btn.addEventListener("pointerleave", () => {
+            setControlState(control, false, btn);
+        });
+    });
+
+    window.addEventListener("blur", () => {
+        keys.left = false;
+        keys.right = false;
+        keys.jump = false;
+    });
 
     document.addEventListener("keydown", (event) => {
         const target = event.target;
